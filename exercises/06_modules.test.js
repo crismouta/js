@@ -43,8 +43,8 @@ test('06_modules-6: can import from my node_modules', () => {
 test.skip('Index import', () => {
   //I have noticed that using index.js is pretty common pattern
   //If someone has been confused about that maybe this helps
-  expect(IndexImport.variable1).toBe('Bob')
-  expect(IndexImport.variable2).toBe('Kent')
-  expect(IndexImport.variable3).toBe(222)
-  expect(IndexImport.variable4).toBe(false)
+  expect(IndexImport.variable1).toBe(/* ENTER YOUR GUESS HERE */)
+  expect(IndexImport.variable2).toBe(/* ENTER YOUR GUESS HERE */)
+  expect(IndexImport.variable3).toBe(/* ENTER YOUR GUESS HERE */)
+  expect(IndexImport.variable4).toBe(/* ENTER YOUR GUESS HERE */)
 })
