@@ -14,27 +14,21 @@ test('02_arrow-2: pot substituir funcions tradicionals #2', () => {
   // Substitueix la 'function' en aquesta crida a 'map' per una funció fletxa.
   // Pista: no hauries de tenir claus ni 'return' quan acabis
 
-  const squares = nums.map(function(num) {
-    return num * num
-  })
-  const funcSource = squares.map.toString();
+  const squares = nums.map(num => num * num)
 
-  expect(funcSource.includes('=>')).toBe(true);
-  
   expect(squares.shift()).toBe(4)
   expect(squares.shift()).toBe(25)
   expect(squares.shift()).toBe(100)
 })
 
 test('02_arrow-3: lliga `this` a l\'àmbit d\'avaluació, no a l\'àmbit d\'execució', () => {
-
   // Modifica l'objecte 'person'. Una de les funcions hauria de convertir-se en una funció fletxa
   // per permetre que 'this' mantingui el context correctament
-  
+
   const person = {
     name: 'Aaron',
     greetFriends: function(friends) {
-      return friends.map(function(friend) {
+      return friends.map(friend => {
         return this.name + ' saluda a ' + friend
       })
     },
@@ -42,6 +36,12 @@ test('02_arrow-3: lliga `this` a l\'àmbit d\'avaluació, no a l\'àmbit d\'exec
 
   const friendsArray = ['Naomi', 'Jojo', 'Ryan', 'Owen']
   expect(() => person.greetFriends(friendsArray)).not.toThrow()
+  expect(person.greetFriends(friendsArray)).toEqual([
+    'Aaron saluda a Naomi',
+    'Aaron saluda a Jojo',
+    'Aaron saluda a Ryan',
+    'Aaron saluda a Owen',
+  ])
 })
 
 test('02_arrow-4: pot fer que les cadenes de filtres d\'arrays siguin més manejables', () => {
@@ -59,29 +59,11 @@ test('02_arrow-4: pot fer que les cadenes de filtres d\'arrays siguin més manej
 
   // SUBSTITUEIX TOTES LES FUNCIONS REGULARS PER FUNCIONS FLETXA
   const shoppingList = data
-    .filter(function(d) {
-      return d.type != 'Widget'
-    }) // Elimina els Widgets
-    .filter(function(d) {
-      return d.price < 5
-    }) // Troba només els elements restants amb preu < 5
-    .sort(function(a, b) {
-      return a.qty - b.qty
-    }) // Ordena per quantitat, descendent
-    .map(function(d) {
-      return d.name
-    }) // Extreu només el nom de cada element
+    .filter(d => d.type != 'Widget') // Elimina els Widgets
+    .filter(d => d.price < 5) // Troba només els elements restants amb preu < 5
+    .sort((a, b) => a.qty - b.qty) // Ordena per quantitat, ascendent
+    .map(d => d.name) // Extreu només el nom de cada element
 
-
-  const filterSource1 = data.filter.toString();
-  const filterSource2 = shoppingList.filter.toString();
-  const sortSource = shoppingList.sort.toString();
-  const mapSource = shoppingList.map.toString();
-
-  expect(filterSource1.includes('=>')).toBe(true);
-  expect(filterSource2.includes('=>')).toBe(true);
-  expect(sortSource.includes('=>')).toBe(true);
-  expect(mapSource.includes('=>')).toBe(true);    
   expect(shoppingList.shift()).toBe('Bacon')
   expect(shoppingList.shift()).toBe('JT Best Hits')
 })

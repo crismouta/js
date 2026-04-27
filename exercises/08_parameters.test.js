@@ -8,10 +8,12 @@ test('08_parameters-1: can be triggered when the incoming argument is undefined'
   expect(getName()).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
 })
 
-test('08_parameters-2: aren\'t included in arguments', () => {
-  const getName = (name = 'Mercury') => arguments.length
+test('08_parameters-2: default parameters do not create extra arguments when omitted', () => {
+  function getName(name = 'Mercury') {
+    return arguments.length
+  }
 
-  // Comprova que els paràmetres per defecte no formen part de l'objecte `arguments`
+  // Comprova que els paràmetres per defecte NO afegeixen arguments si no s'han passat
   expect(getName('Aaron')).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
   expect(getName(null)).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
   expect(getName()).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
@@ -20,12 +22,12 @@ test('08_parameters-2: aren\'t included in arguments', () => {
 test('08_parameters-3: can trigger a function call', () => {
   let triggerCount = 0
 
-  const getName = (name = getDefault()) => name
-
   const getDefault = () => {
     triggerCount++
     return 'Mercury'
   }
+
+  const getName = (name = getDefault()) => name
 
   // Comprova que la funció per defecte només es crida quan és necessari
   expect(triggerCount).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
@@ -48,23 +50,30 @@ test('08_parameters-4: catch non-specified params', () => {
   ).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
 })
 
-test('08_parameters-5: has a different length than `arguments`', () => {
-  const resty = (first, second, ...others) => others.length === arguments.length
+test('08_parameters-5: rest params collect only the extra arguments', () => {
+  function resty(first, second, ...others) {
+    return {
+      restLength: others.length,
+      argumentsLength: arguments.length,
+    }
+  }
 
-  // Comprova que la longitud dels paràmetres rest és diferent de `arguments`
-  expect(resty()).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
-  expect(resty(1)).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
-  expect(resty(1, 2)).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
-  expect(resty(1, 2, 3)).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
+  // Comprova la diferència entre la longitud de `others` i la d'`arguments`
+  expect(resty()).toEqual(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
+  expect(resty(1)).toEqual(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
+  expect(resty(1, 2)).toEqual(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
+  expect(resty(1, 2, 3)).toEqual(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
   expect(
     resty(1, 2, 3, undefined, 5, undefined, 7, undefined, 9, 10),
-  ).toBe(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
+  ).toEqual(/*INTRODUEIX LA TEVA RESPOSTA AQUÍ*/)
 })
 
-test('08_parameters-6: is an actual array, unlike arguments', () => {
+test('08_parameters-6: rest params are a real array, unlike arguments', () => {
   const resty = (...args) => args
 
-  const argy = () => arguments
+  function argy() {
+    return arguments
+  }
 
   const args = argy(1, 2, 3)
   const rests = resty(1, 2, 3)
@@ -83,7 +92,11 @@ test('08_parameters-7: it can default all arguments, optionally', () => {
   // Modifica la signatura del mètode `myFunction` per permetre que
   // tots els arguments siguin opcionals
 
-  const myFunction = ({name, age, favoriteBand} = {}) => {
+  const myFunction = ({
+    name = 'Anonymous',
+    age = 0,
+    favoriteBand = 'Unknown',
+  } = {}) => {
     expect(name).toBeDefined()
     expect(age).toBeDefined()
     expect(favoriteBand).toBeDefined()

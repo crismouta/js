@@ -9,16 +9,18 @@ test('17_public-class-fields-1: public class fields help us avoid .bind-ing ever
   class MyComponent extends FakeReactComponent {
     constructor(...args) {
       super(...args)
-      // no volem haver de fer això...
-      this.handleClick = this.handleClick.bind(this) // trist :-(
+      // ja no necessitem fer bind manual si usem un camp públic de classe
     }
+
     // converteix això en un camp públic de classe perquè s'autolligui
-    handleClick({target: {value}}) {
+    handleClick = ({target: {value}}) => {
       this.props.onClick(value)
     }
+
     render() {
       // coses estranyes de JSX aquí
     }
+
     // això és només perquè puguem provar coses
     testClick(value) {
       const fakeEvent = {target: {value}}
